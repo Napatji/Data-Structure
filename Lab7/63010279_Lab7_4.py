@@ -46,88 +46,104 @@ class BinarySearchTree:
         return self.root
         
     def delete(self,root, data):
-        if root == None:
+        check_node = root
+        if check_node is None:#ไม่มี Root
             print(f'Error! Not Found DATA')
-        else:
-            parent = None
-            check_node = root
+        else:#มี Root
+            parent_node = None#Pointerชี้พ่อแม่ Node ที่จะลบ
             while True:
-                if check_node is None:
+                if check_node is None:#ไม่มี data ที่จะลบใน Root
                     print(f'Error! Not Found DATA')
                     break
-                if data > check_node.data:
-                    parent = check_node
+                elif data > check_node.data:#มากกว่าไปขวา
+                    parent_node = check_node
                     check_node = check_node.right
-                elif data < check_node.data:
-                    parent = check_node
+                elif data < check_node.data:#น้อยกว่าไปซ้าย
+                    parent_node = check_node
                     check_node = check_node.left
                 elif data == check_node.data:
-                    #delete node(no child)
-                    if check_node.left is None and check_node.right is None:
-                        if parent is None:
-                            self.root = None
-                        else:
-                            if parent.left == check_node:
-                                parent.left = None
-                            elif parent.right == check_node:
-                                parent.right = None
-                        break
-                    #delete node(with 2 child)
-                    elif check_node.left and check_node.right:
-                        if parent or parent is None:
-                            #delete root
-                            parent = check_node
-                            minimumParent = None
+                    if parent_node is None: #แสดงว่าลบ Root
+                        parent_node = self.root
+                        if check_node.right and check_node.left:#มีลูก 2 
                             check_node = check_node.right
-                            if check_node.left is None:
-                                parent.data = check_node.data
-                                parent.right = None
+                            min_node, parent_node = checkLeftMin(check_node, parent_node)
+                            temp = min_node.data #เก็บ data node ที่จะมาแทน Root
+                            if min_node.right:
+                                self.delete(root,min_node)
+                                self.root.data = temp
                                 break
-                            while check_node.left:
-                                minimumParent = check_node
-                                check_node = check_node.left
-                            temp = check_node.data
-                            if check_node.right:
-                                self.delete(self.root,temp)
-                            else:
-                                minimumParent.left = None
-                            parent.data = temp
-                            break
-                    #1 child
-                    elif check_node.left or check_node.right:
-                        #if delete root
-                        if parent is None:
+                            elif min_node.right is None:
+                                if parent_node == self.root:
+                                    parent_node.right = None
+                                else:
+                                    parent_node.left = None
+                                self.root.data = temp
+                                break
+                        elif check_node.right or check_node.left:#มีลูกเดี่ยว
                             if check_node.right:
                                 check_node = check_node.right
-                                next_node  = check_node
+                                self.root = check_node
                             elif check_node.left:
                                 check_node = check_node.left
-                                next_node = check_node
-                            self.root = next_node
+                                self.root = check_node 
+                            break     
+                        elif check_node.right is None and check_node.left is None:#ไม่มีลูก
+                            self.root = None
                             break
-                        else:
-                            minimumParent = None
-                            if check_node.right:
-                                parent = check_node
-                                check_node = check_node.right
-                            elif check_node.left:
-                                parent = check_node
-                                check_node = check_node.left
-                            while check_node.left:
-                                minimumParent = check_node
-                                check_node = check_node.left
-                            parent.data = check_node.data
-                            if minimumParent:
-                                if minimumParent.right:
-                                    minimumParent.left = None
-                            else:
-                                parent.right = None
-                            break
-                else:
-                    print(f'Error! Not Found DATA')
 
+                    else:#ลบตั้งแต่ Root ลงไป
+                        if check_node.right and check_node.left:#มีลูก 2 
+                            replace_node = check_node
+                            check_node = check_node.right
+                            min_node, parent_node = checkLeftMin(check_node, parent_node)
+                            temp = min_node.data #เก็บ data node ที่จะมาแทน Root
+                            if min_node.right:
+                                self.delete(root,min_node.data)
+                                replace_node.data = temp
+                                break
+                            elif min_node.right is None: 
+                                parent_node.left = None
+                                replace_node.data = temp
+                                break
+                        elif check_node.right or check_node.left:#มีลูกเดี่ยว
+                            if parent_node.right == check_node:
+                                if check_node.right:
+                                    check_node = check_node.right
+                                    parent_node.right = check_node
+                                elif check_node.left:
+                                    check_node = check_node.left
+                                    parent_node.right = check_node
+                            elif parent_node.left == check_node:
+                                if check_node.right:
+                                    check_node = check_node.right
+                                    parent_node.left = check_node
+                                elif check_node.left:
+                                    check_node = check_node.left
+                                    parent_node.left = check_node
+                            break 
+                        elif check_node.right is None and check_node.left is None:#ไม่มีลูก
+                            if parent_node.left == check_node:
+                                parent_node.left = None
+                            elif parent_node.right == check_node:
+                                parent_node.right = None
+                            break
         return self.root
 
+def checkLeftMin(node, parent):
+    check = node
+    parent_node = parent
+    while check.left:
+        parent_node = check
+        check = check.left
+    return check,parent_node
+    
+def checkRightMost(node, parent):
+    check = node
+    parent_node = parent
+    while check.right:
+        parent_node = check
+        check = check.right
+    return check,parent_node
 
 def printTree90(node, level = 0):
     if node != None:
