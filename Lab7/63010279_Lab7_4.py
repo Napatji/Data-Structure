@@ -154,6 +154,7 @@ def printTree90(node, level = 0):
 if __name__ == "__main__":
     tree = BinarySearchTree()
     data = input("Enter Input : ").split(",")
+    root = tree.root
     for i in data:
         if i[0] == 'i':
             root = tree.insert(int(i[1:]))
@@ -161,6 +162,5 @@ if __name__ == "__main__":
             printTree90(root)
         if i[0] == 'd':
             print(f'delete{i[1:]}')
-            root = tree.root
             root = tree.delete(root, int(i[1:]))
             printTree90(root)
