@@ -1,6 +1,3 @@
-from os import truncate
-
-
 class Stack:
     def __init__(self):
         self.value=[]
@@ -37,13 +34,14 @@ class BST:
     def __init__(self):
         self.root = None
         self.stack = Stack()
+        self.infixout = Stack()
 
     def toInorder(self, postfix):
+        isOpen = False
         for i in postfix:
             if not isOperator(i):#เจอตัวเลข
                 new_node = Node(i)
                 self.stack.push(new_node)
-
             else:#เจอตัวดำเนินการ
                 new_node = Node(i)#เก็บตัวดำเนินการเป็นNode
                 #Popแล้วเก็บค่าตัวเลขที่จะดำเนินการ
@@ -55,8 +53,15 @@ class BST:
                 #เพิ่มตัวดำเนินการลง Stack
                 self.stack.push(new_node)
         #จับ Root มาเท่ากับตัวสุดท้ายที่เหลือซึ่งก็คือ Root
+        self.infixout.reverse()
         self.root = self.stack.pop()
         return self.root
+
+    def isLeaf(self,node):
+        if node.right is None and node.left is None:
+            return True
+        else:
+            return False 
 
     def printTree(self, node, level = 0):
         if node != None:
@@ -66,9 +71,13 @@ class BST:
 
     def printInorder(self, node):
         if node != None:
+            if self.isLeaf(node) == False:
+                print('(',end='')
             self.printInorder(node.left)
             print(node.data,end='')
             self.printInorder(node.right)
+            if self.isLeaf(node) == False:
+                print(')',end='')
 
     def printPreorder(self, node):
         if node != None:
@@ -96,3 +105,4 @@ if __name__ == "__main__":
     print(end='\n')
     print(f'Prefix : ',end='')
     T.printPreorder(root)
+    print(end='\n')
