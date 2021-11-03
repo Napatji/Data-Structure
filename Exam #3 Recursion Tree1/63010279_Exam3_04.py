@@ -15,13 +15,13 @@ class BST:
         else:
             check_node = self.root
             while True:
-                if check_node.val < val:
+                if check_node.val <= val:
                     if check_node.right:
                         check_node = check_node.right
                     else:
                         check_node.right = TreeNode(val)
                         break
-                elif check_node.val >= val:
+                elif check_node.val > val:
                     if check_node.left:
                         check_node = check_node.left
                     else:
@@ -36,20 +36,13 @@ def midValue(list_nums):
         return math.floor(len(list_nums)/2)
 
 def list_to_bst(list_nums):
-    T = BST()
-    mid = midValue(list_nums)
-    root = T.insert(list_nums[mid])
-    left = []
-    right = []
-    for i in range(0,mid):
-        left.append(list_nums[i])
-    for i in range(mid+1,len(list_nums)-1):
-        right.append(list_nums[i])
-    for i in right:
-        root = T.insert(i)
-    for i in left:
-        root = T.insert(i)
-    return root
+    if not list_nums:
+        return None
+    position_root = (len(list_nums)) // 2
+    node = TreeNode(list_nums[position_root])
+    node.left = list_to_bst(list_nums[:position_root])
+    node.right = list_to_bst(list_nums[position_root+1:])
+    return node
 
 def preOrder(node): 
     if not node: 
