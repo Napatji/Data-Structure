@@ -1,4 +1,4 @@
-class TreeNode:
+class TreeNode(object):
     def __init__(self, val):
         self.val = val
         self.left = None
@@ -8,7 +8,7 @@ class TreeNode:
     def __str__(self):
         return str(self.val)
 
-class AVL_Tree:
+class AVL_Tree(object):
 
     def __init__(self):
         self.root = None
@@ -25,54 +25,30 @@ class AVL_Tree:
         root.height = 1 + max(self.getHeight(root.left),self.getHeight(root.right))
 
         balance = self.getBalance(root)
-        left = root.left
-        right = root.right
+
         if abs(balance) > 1:
-            if balance > 1 :
-                if int(key) == int(left.val):
-                    pass
-                if int(key) <= int(left.val):
-                    # Left Left
-                    return self.rightRotate(root)
-                if int(key) >= int(left.val):
-                    # Left Right
-                    left = self.leftRotate(left)
-                    return self.rightRotate(root)
-            if balance < -1 and int(key) >= int(right.val):
-                if int(key) >= int(right.val):
-                    # Right Right
-                    return self.leftRotate(root)
-                if int(key) <= int(right.val):
-                    # Right Left
-                    right = self.rightRotate(right)
-                    return self.leftRotate(root)
+            if balance > 1 and int(key) < int(root.left.val):
+                return self.rightRotate(root)
+
+            if balance < -1 and int(key) >= int(root.right.val):
+                return self.leftRotate(root)
+
+            if balance > 1 and int(key) >= int(root.left.val):
+                root.left = self.leftRotate(root.left)
+                return self.rightRotate(root)
+
+            if balance < -1 and int(key) < int(root.right.val):
+                root.right = self.rightRotate(root.right)
+                return self.leftRotate(root)
+
         return root
 
-    def balanceTree(self, node):
-        if self.getHeight(node.left) != self.getHeight(node.right):
-            if self.getHeight(node.left) > self.getHeight(node.right):
-                check_node = node.left
-                balance = self.getBalance(check_node)
-                #left left
-                #left right
-                #right right
-                #right left
-
-            elif self.getHeight(root.left) < self.getHeight(node.right):
-                check_node = node.right
-                balance = self.getBalance(check_node)
-                #left left
-                #left right
-                #right right
-                #right left
-        return root
-                
     def leftRotate(self, z):
         y = z.right
-        x = y.left
+        T2 = y.left
             # Perform rotation
         y.left = z
-        z.right = x
+        z.right = T2
             # Update heights
         z.height = 1 + max(self.getHeight(z.left),self.getHeight(z.right))
         y.height = 1 + max(self.getHeight(y.left),self.getHeight(y.right))
@@ -80,10 +56,10 @@ class AVL_Tree:
 
     def rightRotate(self, z):
         y = z.left
-        x = y.right
+        T3 = y.right
             # Perform rotation
         y.right = z
-        z.left = x
+        z.left = T3
             # Update heights
         z.height = 1 + max(self.getHeight(z.left),self.getHeight(z.right))
         y.height = 1 + max(self.getHeight(y.left),self.getHeight(y.right))
@@ -98,7 +74,7 @@ class AVL_Tree:
     def getBalance(self, root):
         if not root:
             return 0
-        return self.getHeight(root.left) - self.getHeight(root.right)         
+        return self.getHeight(root.left) - self.getHeight(root.right)
 
 def printTree(node, level = 0):
     if node != None:
@@ -116,6 +92,7 @@ if __name__ == "__main__":
         printTree(root)
         print('--------------------------------------------------')
     # print(T.getBalance(root))
-    # print(T.getHeight(root.left))
-    # print(T.getHeight(root.right))
-    # print(root.height)
+    # print(T.getBalance(root.left))
+    # # print(T.getHeight(root.left))
+    # # print(T.getHeight(root.right))
+    # # print(root.height)
