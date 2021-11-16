@@ -13,7 +13,7 @@ class BST:
         self.root = None
         self.maxIndex = 1
 
-    def insert(self, root, data):
+    def insert(self, root, data):#insert แบบ Complete BST
         if root is None:
             return Node(data, self.maxIndex)
         else:
@@ -34,14 +34,19 @@ class BST:
                     self.insert(self.findAlmostLeft(root), data)
         return root
 
-    def findAlmostLeft(self, node):
+    def checkChild(self, node):#Checkลูก
+        if node.left and node.right:
+            return True
+        return False
+
+    def findAlmostLeft(self, node):#หาNodeเกือบซ้าย
         find = node
         if not find.left.left:
             return node
         else:
             return self.findAlmostLeft(find.left)
 
-    def findIndex(self, node, index):
+    def findIndex(self, node, index):#หาIndex แล้วreturn Nodeที่Indexนั้นกลับมา
         if not node or node.index == index:
             return node
         else:
@@ -58,36 +63,19 @@ class BST:
                 if node.left:
                     return self.findIndex(node.left, index)
 
-    def checkChild(self, node):
-        if node.left and node.right:
-            return True
-        return False
-
-    def rent(self, node, day):
+    def rent(self, node, day):#เพิ่มจำนวนวันที่เช่าลงใน Data
         node.data += day
         return node
 
-    def findLeast(self, root):
+    def findLeast(self, root):#หา Node ที่มีจำนวนวันที่เช่าน้อยที่สุด
         node = root
-        for i in range(1,self.maxIndex+1):
+        for i in range(1,self.maxIndex+1):#Check ตั้งแต่ Indexแรก
             check = self.findIndex(root,i)
             if not check:
                 break
             elif check.data < node.data:
                 node = check
         return node
-
-def printIndex(node, level = 0):
-    if node != None:
-        printIndex(node.right, level + 1)
-        print('     ' * level, node.index)
-        printIndex(node.left, level + 1)
-
-def printTree(node, level = 0):
-    if node != None:
-        printTree(node.right, level + 1)
-        print('     ' * level, node.data)
-        printTree(node.left, level + 1)
 
 if __name__ == "__main__":
     tree = BST()
@@ -97,7 +85,7 @@ if __name__ == "__main__":
     rent_day = list(map(int,rent_day.split(' ')))
     #ประกาศรถตู้
     for i in range(1,van_num[0]+1):
-        root = tree.insert(root,0)
+        root = tree.insert(root,0)#เพิ่มวันที่เช่ารถตู้ทุกคันเป็น 0
     # จองรถตู้
     num = 1
     for i in rent_day:

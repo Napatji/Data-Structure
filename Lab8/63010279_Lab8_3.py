@@ -11,7 +11,7 @@ class BST:
     def __init__(self):
         self.root = None
 
-    def insert(self, root, data):
+    def insert(self, root, data):#insert แบบ Complete BST
         if root is None:
             return Node(data)
         else:
@@ -29,19 +29,19 @@ class BST:
                     self.insert(self.findAlmostLeft(root), data)
         return root
 
-    def findAlmostLeft(self, node):
+    def findAlmostLeft(self, node):#หาNodeเกือบซ้าย
         find = node
         if not find.left.left:
             return node
         else:
             return self.findAlmostLeft(find.left)
 
-    def checkChild(self, node):
+    def checkChild(self, node):#Checkลูก
         if node.left and node.right:
             return True
         return False
 
-    def subtract(self, root):
+    def subtract(self, root):#ลบ Node ลูก
         if not root:
             return
         left = root.left
@@ -76,7 +76,7 @@ class BST:
             right.data = int(temp_R) - int(min(temp_L,temp_R))
         return root
 
-    def sumTree(self,node):
+    def sumTree(self,node):#หาผลบวกเลขใน Node
         if not node:
             return 0
         return node.data + self.sumTree(node.left) + self.sumTree(node.right)

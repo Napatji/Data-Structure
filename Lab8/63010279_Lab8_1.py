@@ -1,4 +1,3 @@
-
 class Node:
     def __init__(self, data, left = None, right = None):
         self.data = data
@@ -65,4 +64,3 @@ if __name__ == "__main__":
     inp = input('Enter Input : ').split(' ')
     for i in inp:
         root = T.insert(int(i))
-    # T.printTree(root)

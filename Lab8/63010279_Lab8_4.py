@@ -13,7 +13,7 @@ class BST:
         self.root = None
         self.maxIndex = 0
 
-    def insert(self, root, data):
+    def insert(self, root, data):#insert แบบ Complete BST
         if root is None:
             return Node(data)
         else:
@@ -34,14 +34,19 @@ class BST:
                     self.insert(self.findAlmostLeft(root), data)
         return root
 
-    def findAlmostLeft(self, node):
+    def checkChild(self, node):#Checkลูก
+        if node.left and node.right:
+            return True
+        return False
+
+    def findAlmostLeft(self, node):#หาNodeเกือบซ้าย
         find = node
         if not find.left.left:
             return node
         else:
             return self.findAlmostLeft(find.left)
 
-    def findIndex(self, node, index):
+    def findIndex(self, node, index):#หาIndex แล้วreturn Nodeที่Indexนั้นกลับมา
         if not node or node.index == index:
             return node
         else:
@@ -58,7 +63,7 @@ class BST:
                 if node.left:
                     return self.findIndex(node.left, index)
 
-    def comparepower(self, node1, node2):
+    def comparepower(self, node1, node2):#เปรียบเทียบพลัง
         if self.sumTree(node1) > self.sumTree(node2):
             print(f'{node1.index}>{node2.index}')
         elif self.sumTree(node1) < self.sumTree(node2):
@@ -66,12 +71,7 @@ class BST:
         else:
             print(f'{node1.index}={node2.index}')
 
-    def checkChild(self, node):
-        if node.left and node.right:
-            return True
-        return False
-
-    def sumTree(self,node):
+    def sumTree(self,node):#หาผลบวกเลขใน Node
         if not node:
             return 0
         return node.data + self.sumTree(node.left) + self.sumTree(node.right)
