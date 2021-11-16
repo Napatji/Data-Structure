@@ -76,9 +76,10 @@ class BST:
             right.data = int(temp_R) - int(min(temp_L,temp_R))
         return root
 
-def sumTree(node):
-    if  node != None:
-        pass
+    def sumTree(self,node):
+        if not node:
+            return 0
+        return node.data + self.sumTree(node.left) + self.sumTree(node.right)
 
 def printTree(node, level = 0):
     if node != None:
@@ -93,7 +94,7 @@ if __name__ == "__main__":
     node_value = node_value.split(' ')
     if (int(node_number) // 2) + 1 != len(node_value):
         print('Incorrect Input')
-    if int(node_number) < 3:
+    elif int(node_number) < 3:
         print('Incorrect Input')
     else:
         for i in range(1,int(node_number)+1):
@@ -101,3 +102,5 @@ if __name__ == "__main__":
                 root = tree.insert(root, 0)
             else:
                 root = tree.insert(root, int(node_value[i-len(node_value)]))
+        tree.subtract(root)
+        print(tree.sumTree(root))
